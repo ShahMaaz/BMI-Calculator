@@ -106,7 +106,7 @@ class _InputPageState extends State<InputPage> {
                             cardIcon: Icons.male,
                             label: 'MALE',
                           ),
-                          myColor: maleCardColor,
+                          myColor: Colors.teal,
                         ),
                       ),
                     ),
