@@ -1,16 +1,10 @@
+import 'package:bmi_calculator/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'reusable_card.dart';
 import 'icon_content.dart';
+import 'constant.dart';
 
-const bottomContainerHeight = 80.0;
-const activeCardColor = Color(0xFF1D1E33);
-const inActiveCardColor = Color(0xFF111328);
-const bottomContainerColor = Color(0xFFEB1555);
-
-enum Gender{
-  male,
-  female
-}
+enum Gender { male, female }
 
 class InputPage extends StatefulWidget {
   @override
@@ -60,15 +54,23 @@ class _InputPageState extends State<InputPage> {
     }
   }*/
 
-Gender selectedGander = Gender.male;
+  Gender selectedGander = Gender.male;
+  int height = 180;
+  int weight = 60;
+  int age = 20;
+  int bmi = 0;
+
+  dynamic calculateBMI(){
+    return weight / ( height * height);
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            title: Text("BMI Calculator"),
-            centerTitle: true,
+        appBar: AppBar(
+          title: Text("BMI Calculator"),
+          centerTitle: true,
 /*            actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -87,79 +89,204 @@ Gender selectedGander = Gender.male;
                 ),
               ),
             ],*/
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            // updateColor(Gender.male);
-                            selectedGander = Gender.male;
-                          });
-                        },
-                        child: ReusableCard(
-                          cardChild: IconContent(
-                            cardIcon: Icons.male,
-                            label: 'MALE',
-                          ),
-                          myColor: selectedGander == Gender.male ? activeCardColor : inActiveCardColor,
-                        ),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          selectedGander = Gender.male;
+                        });
+                      },
+                      cardChild: IconContent(
+                        cardIcon: Icons.male,
+                        label: 'MALE',
                       ),
+                      myColor: selectedGander == Gender.male
+                          ? KActiveCardColor
+                          : KInActiveCardColor,
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (){
+                  ),
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          selectedGander = Gender.female;
+                        });
+                      },
+                      cardChild: IconContent(
+                        cardIcon: Icons.female,
+                        label: 'FEMALE',
+                      ),
+                      myColor: selectedGander == Gender.female
+                          ? KActiveCardColor
+                          : KInActiveCardColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ReusableCard(
+                myColor: KActiveCardColor,
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Height',
+                      style: KLabelTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                          height.toString(),
+                          style: KNumberTextStyle,
+                        ),
+                        Text(
+                          'cm',
+                          style: KLabelTextStyle,
+                        ),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderThemeData(
+                        activeTrackColor: KActiveLabelColor,
+                        inactiveTrackColor: KInActiveLabelColor,
+                        thumbColor: KActiveLabelColor,
+                        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
+                        overlayColor: Color(0x29FFFFFF),
+                        overlayShape: RoundSliderOverlayShape(overlayRadius: 24)
+                      ),
+                      child: Slider(
+                        value: height.toDouble(),
+                        min: 30,
+                        max: 220,
+                        onChanged: (double newHeightValue) {
                           setState(() {
-                            // updateColor(Gender.female);
-                            selectedGander = Gender.female;
+                            height = newHeightValue.round();
+                            calculateBMI();
                           });
                         },
-                        child: ReusableCard(
-                          cardChild: IconContent(
-                            cardIcon: Icons.female,
-                            label: 'FEMALE',
-                          ),
-                          myColor: selectedGander == Gender.female ? activeCardColor : inActiveCardColor,
-                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ReusableCard(myColor: activeCardColor),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: ReusableCard(
+                      myColor: KActiveCardColor,
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Weight',
+                          style: KLabelTextStyle,
+                          ),
+                          Text(
+                            weight.toString(),
+                            style: KNumberTextStyle,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              RoundIconButton(
+                                icon: Icons.add,
+                                onPressed: (){
+                                  setState(() {
+                                    weight++;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              RoundIconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    weight--;
+                                  });
+                                },
+                                icon: Icons.minimize,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ReusableCard(
+                      myColor: KActiveCardColor,
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Age',
+                          style: KLabelTextStyle,
+                          ),
+                          Text(
+                            age.toString(),
+                            style: KNumberTextStyle,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              RoundIconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    age++;
+                                  });
+                                },
+                                icon: Icons.add,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              RoundIconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    age--;
+                                  });
+                                },
+                                icon: Icons.minimize,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: ReusableCard(
-                        myColor: activeCardColor,
-                      ),
-                    ),
-                    Expanded(
-                      child: ReusableCard(
-                        myColor: activeCardColor,
-                      ),
-                    ),
-                  ],
+            ),
+            Container(
+              height: KBottomContainerHeight,
+              width: double.infinity,
+              color: KBottomContainerColor,
+              margin: EdgeInsets.only(top: 10),
+              child: Center(
+                child: Text(
+                  calculateBMI().toString(),
+                  style: KNumberTextStyle,
                 ),
               ),
-              Container(
-                height: bottomContainerHeight,
-                width: double.infinity,
-                color: bottomContainerColor,
-                margin: EdgeInsets.only(top: 10),
-              )
-            ],
-          )),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
