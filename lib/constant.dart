@@ -19,3 +19,31 @@ const TextStyle KNumberTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: KActiveLabelColor,
 );
+
+const KResultTextStyle = TextStyle(
+  fontSize: 22,
+  fontWeight: FontWeight.bold,
+  color: Color(0xff24D876),
+);
+
+const TextStyle KLargeButtonTextStyle = TextStyle(
+  fontSize: 30,
+  color: KActiveLabelColor,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle KTitleTextStyle = TextStyle(
+  fontSize: 50,
+  color: KActiveLabelColor,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle KBMITextStyle = TextStyle(
+  fontSize: 100,
+  fontWeight: FontWeight.bold,
+  color: KActiveLabelColor,
+);
+
+const TextStyle KBodyTextStyle = TextStyle(
+  fontSize: 22,
+);

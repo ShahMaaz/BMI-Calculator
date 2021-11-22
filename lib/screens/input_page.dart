@@ -1,8 +1,13 @@
-import 'package:bmi_calculator/round_icon_button.dart';
+import 'package:bmi_calculator/calculator_brain.dart';
+import 'package:bmi_calculator/components/bottom_button.dart';
+import 'package:bmi_calculator/components/reusable_card.dart';
+import 'package:bmi_calculator/screens/results_page.dart';
+import 'package:bmi_calculator/components/round_icon_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'reusable_card.dart';
-import 'icon_content.dart';
-import 'constant.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../components/icon_content.dart';
+import '../constant.dart';
 
 enum Gender { male, female }
 
@@ -60,8 +65,8 @@ class _InputPageState extends State<InputPage> {
   int age = 20;
   int bmi = 0;
 
-  dynamic calculateBMI(){
-    return weight / ( height * height);
+  dynamic calculateBMI() {
+    return weight / (height * height);
   }
 
   @override
@@ -160,13 +165,14 @@ class _InputPageState extends State<InputPage> {
                     ),
                     SliderTheme(
                       data: SliderThemeData(
-                        activeTrackColor: KActiveLabelColor,
-                        inactiveTrackColor: KInActiveLabelColor,
-                        thumbColor: KActiveLabelColor,
-                        thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12),
-                        overlayColor: Color(0x29FFFFFF),
-                        overlayShape: RoundSliderOverlayShape(overlayRadius: 24)
-                      ),
+                          activeTrackColor: KActiveLabelColor,
+                          inactiveTrackColor: KInActiveLabelColor,
+                          thumbColor: KActiveLabelColor,
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 12),
+                          overlayColor: Color(0x29FFFFFF),
+                          overlayShape:
+                              RoundSliderOverlayShape(overlayRadius: 24)),
                       child: Slider(
                         value: height.toDouble(),
                         min: 30,
@@ -193,8 +199,9 @@ class _InputPageState extends State<InputPage> {
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('Weight',
-                          style: KLabelTextStyle,
+                          Text(
+                            'Weight',
+                            style: KLabelTextStyle,
                           ),
                           Text(
                             weight.toString(),
@@ -204,8 +211,8 @@ class _InputPageState extends State<InputPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               RoundIconButton(
-                                icon: Icons.add,
-                                onPressed: (){
+                                icon: FontAwesomeIcons.plus,
+                                onPressed: () {
                                   setState(() {
                                     weight++;
                                   });
@@ -215,12 +222,12 @@ class _InputPageState extends State<InputPage> {
                                 width: 10,
                               ),
                               RoundIconButton(
-                                onPressed: (){
+                                onPressed: () {
                                   setState(() {
                                     weight--;
                                   });
                                 },
-                                icon: Icons.minimize,
+                                icon: FontAwesomeIcons.minus,
                               ),
                             ],
                           )
@@ -234,8 +241,9 @@ class _InputPageState extends State<InputPage> {
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('Age',
-                          style: KLabelTextStyle,
+                          Text(
+                            'Age',
+                            style: KLabelTextStyle,
                           ),
                           Text(
                             age.toString(),
@@ -245,23 +253,23 @@ class _InputPageState extends State<InputPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               RoundIconButton(
-                                onPressed: (){
+                                onPressed: () {
                                   setState(() {
                                     age++;
                                   });
                                 },
-                                icon: Icons.add,
+                                icon: FontAwesomeIcons.plus,
                               ),
                               SizedBox(
                                 width: 10,
                               ),
                               RoundIconButton(
-                                onPressed: (){
+                                onPressed: () {
                                   setState(() {
                                     age--;
                                   });
                                 },
-                                icon: Icons.minimize,
+                                icon: FontAwesomeIcons.minus,
                               ),
                             ],
                           )
@@ -272,18 +280,20 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
             ),
-            Container(
-              height: KBottomContainerHeight,
-              width: double.infinity,
-              color: KBottomContainerColor,
-              margin: EdgeInsets.only(top: 10),
-              child: Center(
-                child: Text(
-                  calculateBMI().toString(),
-                  style: KNumberTextStyle,
+            BottomButton(onTap: (){
+              CalculatorBrain calculate = CalculatorBrain(height: height, weight: weight);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultsPage(
+                    bmiResult: calculate.calculateBMI(),
+                    resultText: calculate.getResult(),
+                    interpretation: calculate.getInterpretation(),
+                  ),
                 ),
-              ),
-            )
+              );
+            },
+            buttonTitle: 'CALCULATE'),
           ],
         ),
       ),
